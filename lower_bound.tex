@@ -1,0 +1,71 @@
+\section{LOWER BOUND}
+\label{sec:lowerbound}
+
+\input{figs/MnC-mdp}
+
+Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994} derived the first exponential lower bound for PI by analysing runs of Simple PI on a family of $2$-action MDPs, parameterised by the number of states $n$. We  use the same family of MDPs to show a linear lower bound on the expected number of policies evaluated by RPI~\cite{Mansour+Singh:1999}.
+
+The MDP $M_n = (S, A, P, R, \gamma)$, for $n \geq 2$, is
+shown in Figure~\ref{fig:mnc-mdp} and explained below. 
+%$\mathcal{M}=\{ M_n | n\ge 2\}$
+%defined as $M_n=(S, A, P, R, \gamma)$ with 
+In $M_{n}$, there are $3$ types of states in the set $S=\{1, 2, \dots, n\} \cup \{ 0^{\prime}, 1^{\prime}, \dots, n^{\prime}\} \cup \{\Tilde{0}, \Tilde{1}\}$. The action set is $A=\{0, 1\}$. States labelled $i$ have deterministic transitions: depending on the action, the next state 
+is either $i-1$ or $i^{\prime}$ for $i\ge 2$. From states labelled $i^{\prime}$, regardless of the action taken, the next state is picked uniformly at random from $(i-1)^{\prime}$ and $(i-2)$ for $i \ge 3$. States $\Tilde{0}$ and $\Tilde{1}$ are sinks; the agent stays in them forever once they are reached. There is a reward of $-1$ on entering $\Tilde{1}$ from $0^{\prime}$ or $1^{\prime}$. All other rewards are zero. The transitions that make up the corner cases are shown in Figure~\ref{fig:mnc-mdp}. As in the original construction~\cite{Melekopoglou+Condon:1994}, we use $\gamma = 1$. However, it can be verified that the switches made by PI---which depend solely on the $Q$ function---remain the same for 
+$\gamma < 1$. 
+
+%all $\gamma \in (\frac{2^n}{2^n+1}, 1]$. 
+
+%\textcolor{red}{Explain how to me (separately).}
+
+
+Strictly speaking, $M_n$ has $2n+3$ states and hence $2^{2n+3}$ policies. However, there are only $n$ states where the action non-trivially affects the outcome of the next transition. The remaining states are "dummy". Formally, for a policy $\pi$ and state $s\in \{ 0^{\prime}, 1^{\prime}, \dots, n^{\prime}\} \cup \{\Tilde{0}, \Tilde{1}\}$ such that $\pi(s)=0$, we get $Q^{\pi}(s,0)=Q^{\pi}(s,1)=V^{\pi}(s)$, and so $T^{\pi}(s) = \emptyset$. Hence $s$ will not be switched. We adopt the convention that we start PI at a policy $\pi^0$ such that all ``dummy'' states $s$ have $\pi^0(s)=0$. The action at these states will remain $0$ in every policy thereafter visited by PI. In our analysis, we only deal with states in $\{1, 2, \dots, n\}$, and we treat policies as mappings from $\{1, 2, \dots, n\}$ to $\{0, 1\}$. Consequently we may represent a policy $\pi$ as a bit-string $w_1w_2{\dots}w_n \in \{0,1\}^n$ where $\pi(s)=w_s$. In this notation, it can be seen that $\pi^0 = 0^n$ and $\pi^{\star} = 10^{n-1}$. We show the following lower bound.
+\begin{theorem}
+\label{thm:lowerbound}
+	Starting from $\pi^0=0^n$, the expected number of policies RPI evaluates on $M_n$ before terminating is at least $\frac{n+1}{2}$.
+\end{theorem}
+The proof is based on structural properties of $M_{n}$ identified by Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994}. We provide the proof in Appendix B in the supplementary material.
+%we can only reach policies $\pi$ with $\pi(s)=0$ for all "dummy" states. There are only $2^n$ such policies, characterized by their actions on the states other than the "dummy" states. Henceforth, we assume $\pi: [n] \xrightarrow{} \{0, 1\}$ for any policy $\pi$, with $\pi(s)=0$ implicit for all "dummy" states $s\in S$. \footnote{$[n]$ is shorthand for $\{1, 2, ..., n\}$.}
+%Formally, if we define an equivalence relation $\sim$ on the policy space $\Pi$ such that $\pi \sim \pi'$ if and only if $V^\pi=V^{\pi'}$, this relation has only $2^n$ equivalence classes, one for each element in $\Pi' = \{ \pi:\{1, 2, ..., n\}\xrightarrow{} \{0,1\} \}$. Moreover
+% 1. WHAT IS THE CONVENTION ABOUT POLICIES, SINCE MANY STATES ARE DUMMY? SHOULD WE ASSUME POLICIES MAP $\{1, 2, \dots, n\}$ TO $\{0, 1\}$?
+
+%We provide a sketch of our proof and the intermediate results. Full proofs, which mainly rely on  structural arguments about $M_{n}$, are provided in Appendix B in the supplemental material.
+
+
+
+% \begin{lemma}
+% \label{l1}
+% For a policy $\pi$ for $M_n$, a state $s$ is switchable if and only if $\sum_{s'\le s}\pi(s) \equiv 0 \mod 2.$
+% \end{lemma}
+
+
+% \begin{definition}
+% \label{d2}
+%     For a policy $\pi$ for $M_n$, $$f(\pi) \mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}} \min \left(\textsf{states}(T^\pi) \cup \{n+1\}\right).$$
+% \end{definition}
+% In other words, $f(\pi)$ is defined to be the smallest switchable state if $\pi$ is not optimal, and $n + 1$ if it is $\pi^{\star}$. The lemma below establishes the monotonicity of $f$.
+
+% \begin{lemma}
+% \label{l3}
+%     If a PI algorithm visits the policies $\pi^0, \pi^1, \dots, \pi^m$ in sequence, then for $1\le i \le m$, $f(\pi^{i-1})\le f(\pi^i)$.
+% \end{lemma}
+
+
+% \begin{lemma}
+% \label{l4}
+%     If RPI visits the policies $\pi^0, \pi^1, \dots, \pi^m$ in sequence, then for $1\le i \le m$, $t \ge 0$, $$\mathbb{P}\{f(\pi^{i}) - f(\pi^{i-1}) \ge t\} \le \frac{1}{2^t}.$$
+% \end{lemma}
+
+
+% \begin{definition}
+%     We define $L(\pi)$ to be the expected number of policies evaluated by RPI when initialised at $\pi$.
+% \end{definition}
+% Note that even if we start from $\pi^0=\pi^{\star}$, we need to evaluate $\pi^0$ to know that it is optimal. Hence $L(\pi^{\star})=1$. Let $[x]$ denote the set $\{1, 2, \dots, x\}.$
+% \begin{definition}
+% For $s \in [n + 1]$, we define $N(s) = \min\{L(\pi)|f(\pi)\le s\}$.
+% \end{definition} 
+
+% \begin{theorem}
+% 	For $s\in [n+1]$, $N(s) \ge n+2-s$.
+%     % $N(n+1) = 0$. $N(i) \ge n+2-i$ for $1 \le i \le n$.
+% \end{theorem}
+

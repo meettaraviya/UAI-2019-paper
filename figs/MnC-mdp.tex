@@ -1,0 +1,77 @@
+
+  \begin{figure*}[t]
+  \centering
+  % \scalebox{0.7}
+  % {
+  % \begin{tikzpicture}[node distance=3cm,auto,scale=0.1,-{Latex[length=3mm,width=2mm]},>=Latex]
+  \begin{tikzpicture}[node distance=3cm,auto,scale=0.5,transform shape,
+-{Latex[length=1.8mm,width=1mm]},>=Latex]
+
+  % \begin{tikzpicture}[node distance=3cm,auto,scale=0.6, every node/.style={scale=0.6},->]
+    % \tikzstyle{state}=[circle,draw=black,minimum size=13mm]
+    % \tikzstyle{sink}=[draw=black,minimum size=12mm]
+    \tikzset{state/.style={circle,draw=black,minimum size=14mm},
+          sink/.style={draw=black,minimum size=12mm}}
+
+    \node[state](n){$n$};
+    \node[state,right of=n](n1){$n-1$};
+    \node[state,right of=n1](n2){$n-2$};
+    \node[right of=n2](e1){\Huge\textbf{...}};
+    \node[state,right of=e1](nn2){$2$};
+    \node[state,right of=nn2](nn1){$1$};
+    \node[state,right of=nn1](nn0'){$0'$};
+    \node[sink,right of=nn0'](s1){$\Tilde{1}$};
+    
+    \node[state,below of=n](n'){$n'$};
+    \node[state,right of=n'](n1'){$(n-1)'$};
+    \node[state,right of=n1'](n2'){$(n-2)'$};
+    \node[right of=n2'](e1'){\Huge\textbf{...}};
+    \node[state,right of=e1'](nn2'){$2'$};
+    \node[state,right of=nn2'](nn1'){$1'$};
+    \node[sink,right of=nn1'](s0){$\Tilde{0}$};
+    
+
+    \draw(n) edge [dashed, red] (n1);
+    \draw(n1) edge [dashed, red] (n2);
+    \draw(nn2) edge [dashed, red] (nn1);
+    \draw(nn1) edge [dashed, red] (nn0');
+    \draw(nn0') edge node {$-1$} (s1);
+    \draw(nn0') to[bend right=20] (n);
+
+
+    \draw(n') edge (n1');
+    \draw(n1') edge (n2');
+    \draw(nn2') edge (nn1');
+    \draw(nn1') edge (s0);
+    
+    \draw(n) edge [densely dotted, blue] (n');
+    \draw(n1) edge [densely dotted, blue] (n1');
+    \draw(nn2) edge [densely dotted, blue] (nn2');
+    \draw(nn1) edge [densely dotted, blue] (nn1');
+    \draw(n') edge (n2);
+    \draw(n1') edge (e1);
+    \draw(n2) edge [dashed, red] (e1);
+    \draw(n2') edge (e1');
+    \draw(nn2') edge (nn0');
+    \draw(nn1') edge node {$-1$} (s1);
+    \draw(s0) edge [loop right] (s0);
+    \draw(s1) edge [loop right] (s1);
+
+
+  \end{tikzpicture}
+  % }
+  \caption{Family of MDPs used to prove the lower bound on RPI. Red (dashed) and blue (dotted) edges from states $1, 2,  \dots, n$
+  correspond to actions $0$ and $1$, respectively. Black (solid) edges from all others states are equiprobable under both actions.}
+  \label{fig:mnc-mdp}
+  \end{figure*}
+
+%   \draw(n) edge node {0} (n1);
+%   \draw(n1) edge node {0} (n2);
+%   \draw(nn2) edge node {0} (nn1);
+%   \draw(nn1) edge node {0} (nn0');
+%   \draw(n) edge node{1} (n');
+%   \draw(n1) edge node{1} (n1');
+%   \draw(nn2) edge node{1} (nn2');
+%   \draw(nn1) edge node{1} (nn1');
+%   \path [->]
+%   (s0)[loop, -{Latex[length=3mm,width=2mm]}] edge (s0);

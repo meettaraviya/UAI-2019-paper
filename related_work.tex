@@ -1,0 +1,56 @@
+\section{RELATED WORK}
+\label{sec:relatedworkandcontribution}
+
+%``Strong'' bounds for MDP planning are those that depend solely on the number of states and actions, and not on additional parameters such as the discount factor. \st{Although PI tends to perform extremely well in practice,} \highlight{While polynomial bounds for MDP planning with a fixed discount rate $\gamma$ are known \cite{Ye:2011},} the tightest strong bounds known for MDP planning come from Linear Programning (LP) algorithms that operate on an LP formulation of the MDP~\cite[see Section 2]{Kalyanakrishnan+Gupta}. While the bounds we have shown for RPI-UIP are exponential in $n$, it is to be noted that the LP route can yield bounds of the form $\text{poly}(n, k) \cdot \exp(O(\sqrt{n\log n}))$~\cite{Matousek+SW:1996} on the number of arithmetic operations.
+
+In this section, we survey results on the complexity of different variants of PI. We only consider strong bounds---which solely depend on the number of states $n$ and the number of actions $k$ in the MDP. Note that polynomial upper bounds in $n$ and $k$ exist for variants of PI if dependence on additional parameters such as the discount factor $\gamma$ and the representation size $B$ are permitted~\cite{Ye:2011,Scherrer:2013}. Also note that the LP route for MDP planning can yield a strong upper bound of $\text{poly}(n, k) \cdot \exp(O(\sqrt{n
+  \log n}))$~\cite{Matousek+SW:1996} operations. Strong upper bounds known yet for PI  are all exponential in $n$. Since policy evaluation is polynomial in $n$ and $k$, the bounds we discuss below are on the number of policy evaluations performed by PI.
+  
+We claim $u(n, k)$ as an upper bound for some variant if for \textit{every} $n$-state, $k$-action MDP, from \textit{every} starting policy, the (expected) number of policy evaluations performed is at most $u(n, k)$ (expectation needed only for randomised variants). On the other hand, $l(n, k)$ is a lower bound for some algorithm if there exist an $n$-state, $k$-action MDP and a starting policy from which the (expected) number of policy evaluations performed is at least $l(n, k)$. Table~\ref{tab:summaryofbounds} summarises existing upper bounds side-by-side with our improvements, which we proceed to present. Assume $\pi \in \Pi$ is the policy being considered for improvement and $U$ the subset of $T^{\pi}$ to be used for switching---to obtain $\pi^{\prime} = \textsf{modify}(\pi, U)$.
+
+\begin{table}[t]
+\centering
+\caption{Upper bounds for PI variants for general $k$. References and descriptions of the algorithms are given in the text. Except the entry marked ``D'', all the results from this paper correspond to randomised variants, of which some are obtained by specialising or slightly altering the original variant.}
+\label{tab:summaryofbounds}
+\begin{tabular}{c|c|c}
+\textbf{Variant} & \textbf{Previous} & \textbf{This paper}\\\hline
+HPI &  $O(\frac{k^{n}}{n})$ & $(O(k \log k))^{n / 2}$\\\hline
+RPI & $O(((1 + \frac{2}{\log_{2} k})\frac{k}{2})^{n})$ & $(O(k \log k))^{n / 2}$\\\hline
+\multirow{2}{*}{BSPI}  & \multirow{2}{*}{$k^{0.7207n}$} & $k^{0.7019n}$ [D]\\
+ &  & $k^{0.6782n}$\\\hline
+RSPI & $(O(\log k))^{n}$ & --\\ \hline
+\end{tabular}
+\end{table}
+
+
+\noindent\textbf{Howard's PI.} The earliest variant of PI, introduced by Howard~\shortcite{Howard:1960}, is also the most commonly used. Howard's PI (HPI) dictates that \textit{every} improvable state be switched; in other words, $\textit{States}(U) = \textit{States}(T^{\pi})$. For $2$-action MDPs, this description fixes the switching rule, since $|T^{\pi}(s)| \leq 1$ for every state $s$. If $k \geq 3$, there might be multiple improving actions for some state---in which case we may pick an \textit{arbitrary} one for switching. The tightest upper bound on the number of iterations taken by HPI is $O(k^{n}/n)$~\cite{Mansour+Singh:1999}; the multiplicative factor has subsequently been improved~\cite{Hollanders+GDJ:2014}. Mansour and Singh's analysis partitions $\Pi$ into a set of ``large-improvement'' policies and a set of ``small-improvement'' policies. For large-improvement policies, defined as those for which $|\textsf{states}(T^{\pi})|$ exceeds a threshold $m$, a structural argument shows that $\pi^{\prime}$ will dominate or be incomparable to at least $m$ policies that themselves dominate $\pi$. Since each large-improvement policy therefore eliminates $m$ policies, and since the number of small-improvement policies can be upper-bounded in terms of $m$, tuning $m$ yields an overall bound of $O(k^{n}/n)$ iterations.\\
+
+\noindent\textbf{Randomised PI.} Mansour and Singh~\shortcite{Mansour+Singh:1999} also propose a randomised variant of PI (RPI), in which \textsf{states}($U$) is picked uniformly at random from  the non-empty subsets of \textsf{states}($T^{\pi}$). Again, if $k \geq 3$, improving actions can be picked arbitrarily. In this case, it can be shown that visits to large-improvement policies eliminate $\Theta(2^{m})$ policies in expectation, leading to an overall bound of $O(((1 + 2/\log_{2} k )(k/2))^{n})$ iterations. For the special case of $k = 2$, Mansour and Singh~\shortcite{Mansour+Singh:1999} provide a 
+a tighter bound of $O(1.7172^{n})$ iterations.\\
+
+\noindent\textbf{Batch-switching PI.} In a relatively recent line of work, Kalyanakrishnan et al.~\shortcite{Kalyanakrishnan+MG-bspi:2016} propose a scheme to translate upper bounds on the complexity of PI for small (constant-size) MDPs to ones for general MDPs. Arguing essentially based on the policy improvement theorem, they demonstrate that HPI can take at most $33$ iterations on $7$-state, $2$-action MDPs. This bound comes from a relaxation called the ``order regularity'' problem~ \cite{Gerencser+HDJ:2015}. Batch-switching PI (BSPI) is a variant of PI in which states only within a fixed-size batch of states are switched at each iteration. Assuming that batches are indexed, the batch with the highest index among those with improvable states is picked. For a batch size of $7$, a recursive argument establishes that BSPI can take at most $33^{n/7} < 1.6479^{n}$ iterations on $2$-action MDPs. The numerical computation of the bound for batch sizes $8$ and higher has not been feasible, although evidence suggests that larger batch sizes might be even more economical. If such a trend is indeed true, then HPI---which can be construed as BSPI with a batch size of $n$---would itself  enjoy an upper bound of $1.6479^{n}$ iterations.
+
+Gupta and Kalyanakrishnan~\shortcite{Kalyanakrishnan+Gupta} augment BSPI with a layer of recursion over \textit{actions}, extending the bound of $1.6479^{n}$ iterations for $2$-action MDPs to $k^{(\log_{2} 1.6479)n} < k^{0.7207n}$ iterations for $k$-action MDPs, $k \geq 2$. While their algorithm is deterministic, the currently-tightest upper bound for PI on $k$-action MDPs is for a randomised variant of ``Simple PI'' ~\cite{Melekopoglou+Condon:1994}, which is the same as BSPI with a batch size of $1$. Crucial to the analysis of this algorithm, RSPI~\cite{Kalyanakrishnan+MG:2016}, is that an improving action be picked \textit{uniformly at random} from those available for the chosen state. The resulting upper bound is $(2 + \ln(k - 1))^{n}$.\\
+
+\noindent\textbf{Lower bounds.} Interestingly, on $2$-action MDPs, Simple PI can take as many as $2^{n}$ iterations~\cite{Melekopoglou+Condon:1994}. However, only a lower bound of $\Omega(n)$ iterations has been shown on 2-action MDPs for HPI~\cite{Hansen+Zwick:2010}. Exponential bounds have been shown for HPI on MDPs when the number of actions can depend linearly on the
+number of states~\cite{Fearnley:2010,Hollanders+DJ:2012}. Schurr and Szab\'{o}~\shortcite{Schurr+Szabo:2005} also show an exponential lower bound for HPI on AUSOs. The AUSOs they construct do not satisfy the Holt-Klee conditions (and therefore do not originate from MDPs).\\
+
+%However, it is not known if this family of AUSOs is realizable by an MDP. 
+
+
+\noindent\textbf{Our contributions.} We make five contributions to the analysis of PI. 
+
+\begin{enumerate}
+
+    \item We show that a slight modification to the RPI algorithm of Mansour and Singh~\shortcite{Mansour+Singh:1999} results in an upper bound $(O(\sqrt{k\log k}))^{n}$ iterations---significantly tighter than the authors had originally shown. Our proof rests on a key structural property of $k$-action MDPs and also a new counting argument.
+
+    \item We propose a randomised variant of HPI (switch \textit{all} improvable states; select improving actions uniformly at random) that achieves an $(O(\sqrt{k\log k}))^{n}$ upper bound. This becomes the first exponential improvement for HPI over the trivial bound of $k^{n}$.
+
+    \item Using a search by computer program, we show that BSPI~\cite{Kalyanakrishnan+MG-bspi:2016}, if implemented with RPI in place of HPI within each batch, achieves an upper bound of $1.6001^{n}$ iterations for $2$-action MDPs. This bound is the tightest yet shown for the PI family on $2$-action MDPs. Our search also uncovers a bound of $1.6266^{n}$ iterations for HPI-based BSPI on $2$-action MDPs. This bound translates to $k^{0.7019n}$ for $k$-action MDPs, and is the tightest bound yet for a deterministic PI variant.
+
+    \item Using the MDP construction of the Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994}, we show an $\Omega(n)$ lower bound for RPI on $2$-action MDPs, matching the one shown by Hansen and Zwick~\shortcite{Hansen+Zwick:2010} for HPI.
+ 
+    \item We present an experimental comparison of the different PI variants analysed in this paper. Our results show many interesting trends that are not explained by the current theory, and motivate further analysis.
+\end{enumerate}
+
+We proceed to our contributions.

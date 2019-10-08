@@ -1,0 +1,84 @@
+\section{POLICY ITERATION}
+\label{sec:policy_iteration}
+
+In this section, we formalise Policy Iteration (PI), borrowing notation and definitions from Mansour and Singh~\shortcite{Mansour+Singh:1999}. We assume that the set of states $S$ and the set of actions $A$ are finite, with $|S| = n \geq 1$ and $|A| = k \geq 2$. Specifically, we take $A = \{0, 1, \dots, k - 1\}$.
+
+\textit{Policy evaluation} is a basic step that is used in PI and many other approaches for MDP planning. Given a policy $\pi \in \Pi$, observe that state values (together the \textit{value function} $V^{\pi}$) satisfy a recursive relation: for $s \in S$,  $$V^{\pi}(s) = \sum_{s^{\prime} \in S} P(s, \pi(s), s^{\prime}) (R(s, \pi(s), s^{\prime}) + \gamma V^{\pi}(s^{\prime})).$$ Hence, a given policy $\pi$ can be \textit{evaluated} (that is, $V^{\pi}$ computed) by solving a system of linear equations.
+
+For policies $\pi, \pi^{\prime} \in \Pi$, we write $\pi \succeq \pi^{\prime}$ if for all $s \in S$, $V^{\pi}(s) \geq V^{\pi^{\prime}}(s).$ If $\pi \succeq \pi^{\prime}$, and in addition, for some $s \in S$, $V^{\pi}(s) > V^{\pi^{\prime}}(s)$, then we write $\pi \succ \pi^{\prime}$. Observe that if $\pi \succeq \pi^{\prime}$ and $\pi^{\prime} \succeq \pi$, then $V^{\pi}$ and $V^{\pi^{\prime}}$ must be equal, in which case we write $\pi \approx \pi^{\prime}$. We find it convenient to distinguish between such ``equally-good'' policies by using an arbitrary total order $L$ on $\Pi$. Since policies can be represented as $n$-length $k$-ary strings from $\{0, 1, \dots, k - 1\}^{n}$, we take that for $\pi, \pi^{\prime} \in \Pi$, $\pi L \pi^{\prime}$ if and only if $\pi$ lexicographically precedes or equals $\pi^{\prime}$. We define $\pi \gtrsim \pi^{\prime}$ if (1) $\pi \succ \pi^{\prime}$ or (2) $\pi \approx \pi^{\prime}$ and $\pi L \pi^{\prime}$. By this definition, observe that there is a \textit{unique} optimal policy $\pi^{\star}$ such that for all $\pi \in \Pi$, $\pi^{\star} \gtrsim \pi$. Our algorithms will be designed to find this policy.
+
+A na\"{i}ve way to find $\pi^{\star}$ would be to evaluate each of the $k^{n}$ policies in $\Pi$ and then compare them. As we see next, the PI family of algorithms exploits an interesting structure of the policy space to find $\pi^{\star}$ more efficiently.
+
+The \textit{action value function} $Q^{\pi}$ for a policy $\pi \in \Pi$ provides for each $s \in S$, $a \in A$ the expected long-term reward obtained by taking $a$ from $s$ for a single time step, and thereafter acting according to $\pi$. It follows that $$Q^{\pi}(s, a) = \sum_{s^{\prime} \in S} P(s, a, s^{\prime}) (R(s, a, s^{\prime}) + \gamma V^{\pi}(s^{\prime})).$$ Now, define $T^\pi$ as follows:
+\begin{align*}
+T^\pi =& \{(s,a) | Q^\pi(s,a) > V^\pi(s)\} \cup\\
+& \{(s, a) | Q^\pi(s,a) = V^\pi(s) \text{ and } a < \pi(s)\}.
+\end{align*}
+If $(s, a) \in T^{\pi}$, then $s$ is termed an ``improvable state'' for $\pi$ and $a$ an ``improving action'' at $s$ for $\pi$. For fixed $\pi$, let $\textsf{states}(T^{\pi})$ denote the set of all improvable states $s \in S$, and $T^{\pi}(s)$ denote the set of all improving actions for fixed $s \in S$,  with the convention that $T^{\pi}(s) = \emptyset$ if $s \notin \textsf{states}(T^{\pi})$. Now, if $|T^{\pi}| > 0$, let $U \subseteq T^{\pi}$ be such that $|U| \geq 1$, and no two distinct elements $(s, a)$ and $(s^{\prime}, a^{\prime}) \in U$ have $s = s^{\prime}$. In other words, $U$ collects a subset of improvable states---denoted $\textsf{states}(U)$---and exactly one improving action for each such state. In general, there can be many choices of $U$ that satisfy this property for $T^{\pi}$. For some fixed $U$, let $\textsf{modify}(\pi, U)$ denote the policy $\pi^{\prime}$ such that for all $(s, a) \in U$, $\pi^{\prime}(s) = a$ and for all $s \in S \setminus \textsf{states}(U)$, $\pi^{\prime}(s) = \pi(s)$. We collect all such policies $\pi^{\prime}$, each derived from a different choice of $U$, in a set $I(\pi)$: the set of (locally) ``improving'' policies of $\pi$. Observe that $|I(\pi)| = \prod_{s \in S} (|T^{\pi}(s)| + 1) - 1,$
+and so $I(\pi)$ is empty if and only if $T^{\pi}$ is empty. The Policy Improvement Theorem, provided below, is a well-known result highlighting the relevance of $I(\pi)$. We omit the proof, which is provided by several other sources~\cite{Szepesvari:2010,Bertsekas:2012,Kalyanakrishnan+MG:2016}.
+\begin{theorem}
+\label{thm:pi}
+For $\pi \in \Pi$: (1) if $T^{\pi} = \emptyset$, then for all $\pi^{\prime} \in \Pi$, $\pi \gtrsim \pi^{\prime}$; (2) else for all $\pi^{\prime} \in I(\pi)$, $\pi^{\prime} \gtrsim \pi$.
+\end{theorem}
+The theorem allows us to test if a given policy $\pi$ is optimal, and if it is not, to update to a dominating policy $\pi^{\prime}$. The PI family of algorithms is based on repeatedly performing such updates until eventually, an optimal policy is reached. Given $\pi \in \Pi$, observe that $V^{\pi}$ and $Q^{\pi}$, and therefore $T^{\pi}$, can be computed efficiently---using $\text{poly}(n, k)$ arithmetic and comparison operations. The complexity of PI is therefore determined primarily by the number of iterations performed to reach $\pi^{\star}$. Algorithms in the PI family are set apart by their ``switching rules'': how they pick $U \subseteq T^{\pi}$  for setting $\pi^{\prime} = \textsf{modify}(\pi, U)$. In general, these algorithms can be randomised. We discuss several PI variants in the next section, but before proceeding, present two related ideas.
+
+First, it is convenient for our analysis to also consider the ``opposite'' of policy-improvement: only switching to actions that are \textit{not} improving. The following corollary is easily proven in the same manner as Theorem~\ref{thm:pi}.
+
+\begin{corollary}
+\label{cor:pd}%Policy "deprovement"
+For $\pi, \pi^{\prime} \in \Pi$, suppose for all $s \in S: (\pi^{\prime}(s) \neq \pi(s)) \implies (\pi^{\prime}(s) \notin T^{\pi}(s))$. Then $\pi \gtrsim \pi^{\prime}$.
+\end{corollary}
+
+Second, it is worth noting that while our primary focus is the application of PI to MDPs, the upper bounds we show in Section~\ref{sec:upperbounds}, and indeed those originally given by Mansour and Singh~\shortcite{Mansour+Singh:1999}, also hold for solving a class of discrete objects called Acyclic Unique Sink Orientations (AUSOs)~\cite{Stickney+Watson:1978,Szabo+Welzl:2001}. Now, it follows from Theorem~\ref{thm:pi} and Corollary~\ref{cor:pd} that any two policies $\pi$ and $\pi^{\prime}$ that differ in exactly one state must satisfy either $\pi \gtrsim \pi^{\prime}$ or $\pi^{\prime} \gtrsim \pi$. Thus, in particular, policies for 2-state MDPs can be arranged as vertices of an $n$-dimensional hypercube, with edges (1) connecting policies that 
+differ in exactly one state, and (2) oriented according to $\gtrsim$. Each face of the hypercube is guaranteed to have a unique sink and no cycles, making the hypercube an AUSO~\cite{Kalyanakrishnan+Gupta}. Figures \ref{fig:example-mdp}--\ref{fig:example-auso} illustrate the relationship between $2$-action MDPs and AUSOs with an example.
+
+\input{figs/example-mdp}
+
+%For illustration, consider the $3$-state, $2$-action MDP shown in Figure~\ref{fig:example-mdp}. The table in Figure~\ref{tab:evaluations} shows the value functions of the $8$ resulting policies $\pi$, along with $T^{\pi}$. The graph in Figure~\ref{fig:example-lattice} has vertices corresponding to the $8$ policies; directed edges connect each non-optimal policy $\pi$ with all the polices in $I(\pi)$.  
+
+%\cite{Stickney+Watson:1978}
+
+\textit{Solving} a given AUSO amounts to identifying its sink. For so doing, an algorithm may \textit{evaluate} vertices one at a time, thereby discovering their outgoing edges. In this context, PI would begin with an arbitrary vertex $u$, and repeatedly update to some vertex $v$ in the subface formed by the outgoing edges of $u$ (thus $v$ ``locally improves'' upon $u$). If $u$ has no outgoing edges, it must be the sink.
+
+Interestingly, it can be shown that AUSOs resulting from MDPs must additionally satisfy the \textit{Holt-Klee conditions}~\cite{Holt+Klee:1999}, which are: for an $n$-dimensional AUSO, every $d$-dimensional face, $1 \leq d \leq n$, should have at least $d$ vertex-disconnected paths from source to sink. The Holt-Klee conditions hold for all AUSOs induced by Linear Programs, and can be shown for MDPs by considering their Linear programming formulation~\cite{Post+Ye:2013}. In the example from Figure~\ref{fig:example-auso}, notice that from the source $001$, there are paths through $000$ and $100$; $011$ and $010$; and also $101$ and $111$ to the sink $110$ . All $2$- and $1$-dimensional AUSOs necessarily satisfy the Holt-Klee conditions.
+
+
+\begin{comment}
+
+and an analysis of their
+Algorithms within the PI family are indeed differentiated solely by the rule they apply to pick states for switching. Most popular is Howard’s PI \cite{Howard:1960}, which implements a greedy switching rule, wherein every state in the improvable set is switched. We still have the choice on how to select the improving action for the states in the improvable set. While Mansour and Singh \shortcite{Mansour+Singh:1999} proved the upper bound for Howard's PI for an arbitrary action selection rule, we only consider a randomized rule where in we select the improving action uniformly at random from $T^\pi(s)\backslash \{\pi(s)\}$ for states in the improvable set where we have a choice of selecting the improving action. \cite{Mansour+Singh:1999} also introduced Randomized PI, wherein we select $\pi'(s)$ uniformly at random from $T^\pi(s)$ for each state $s$.
+
+A switch corresponds to changing the actions taken by the current policy on one or more of these improvable states. Since $\forall s\in S, \pi \in \Pi: (s,\pi(s))\in T^\pi$, $|T^\pi|\ge n$. Also, for the optimal policy $\pi^{*}$, $|T^{\pi^{*}}|=n$. Formally, a switch is defined by a set $L^\pi \subseteq T^\pi$ such that $|\text{states}(L^\pi)|=|L^\pi|=n$. This condition ensures that we select only one action for each state $s\in S$. We say $\pi'$ improves upon $\pi$ if $\{(s,\pi'(s))|s\in S\}$ is a switch for $\pi$. Thus we allow $\pi'=\pi$ when $\pi$ is not optimal. Since we are only dealing with randomized algorithms, the probability of this happening is very low and it can indeed be shown that this relaxation can cause at most a constant factor difference in the bounds we will derive.
+
+Informally, $V^\pi(s)$ is the expected return when the agent starts at states $s$ and follows $\pi$ forever, and $Q^\pi(s,a)$ is the expected return when the agent starts at state $s$, takes action $a$ and follows $\pi$ thereafter forever. For $\pi, \pi' \in \Pi$,$ s\in S$,$a,a' \in A$, we define $\gtrsim$ as
+\begin{multline}
+Q^\pi(s,a) \gtrsim Q^{\pi'}(s,a') \\ \hfill\null\stackrel{\text{def}}{=} Q^\pi(s,a) > Q^{\pi'}(s,a') \hfill\null\\ \hfill\null\vee (Q^\pi(s,a) = Q^{\pi'}(s,a') \wedge a \ge a')
+\end{multline}
+\par
+Since $V^\pi(s)=Q^\pi(s,\pi(s))$, we can easily extend $\gtrsim$ to the value functions as well. We say $V^\pi \succeq V^{\pi'}$ or $\pi \succeq \pi'$ if $V^\pi(s) \gtrsim V^{\pi'}(s)$ for all $s \in S$. Using $\gtrsim$ instead of $\ge$ ensures that two unequal policies $\pi$ and $\pi'$ cannot satisfy both $\pi \succeq \pi'$ and $\pi \preceq \pi'$. Thus $(\Pi, \preceq)$ is a partial order. It is a key property, as established by Bellman \shortcite{Bellman:1957}, that this set contains a policy $\pi^{*}$ such that $\forall \pi \in \Pi$, $\pi^{*}\succeq \pi$. Such a policy is called an \textit{optimal} policy. With the modified definition where we use $\gtrsim$ instead of $\ge$, it can further be shown that there is a unique optimal policy.
+% \begin{multline}
+% V^\pi(s) \gtrsim V^{\pi'}(s) \\ \stackrel{\text{def}}{=} V^\pi(s) > V^{\pi'}(s) \vee (V^\pi(s) = V^{\pi'}(s) \wedge \pi(s)\ge \pi'(s))
+% \end{multline}
+
+% We say that a policy $\pi$ dominates over policy $\pi'$ \textit{at a state} $s$ or $V^\pi(s) \gtrsim V^{\pi'}(s)$ if $V^\pi(s) > V^{\pi'}(s) \vee (V^\pi(s) = V^{\pi'}(s) \wedge \pi(s)\ge \pi'(s))$. We say $\pi$ dominates over $\pi'$ if it dominates over $\pi'$ at all states. 
+% \par
+% Let $\Pi$ be the set of distinct policies corresponding to $M$. It is a key property, as established by Bellman \shortcite{Bellman:1957}, that this set contains a policy $\pi^{*}$ such that for $\forall s \in S$, $\pi \in \Pi$, $$V^{\pi^{*}}(s) \ge V^\pi(s)$$. Such a policy $\pi^{*}$ is called an optimal policy; in general there can be multiple optimal policies for an MDP.
+\par
+The problem we consider is precisely that of finding an optimal policy for a given MDP $M = (S, A, R, T, \gamma)$. Specifically, we examine the Policy Iteration (PI) family of algorithms \cite{Howard:1960}, which follow the general template of starting with some initial policy, and repeatedly performing locally improving “switches” until an optimal policy is found. Each non-optimal policy $s$ is guaranteed to have a nonempty set of “improvable” state-action pairs, which are defined as
+\begin{multline}
+    T^\pi \subseteq S\times A; \hfill\null\\ \hfill\null T^\pi = \{(s,a) | Q^\pi(s,a) \gtrsim V^\pi(s)\}
+    \hfill\null
+\end{multline}
+We will use $\text{states}(T^\pi)$ to denote all the improvable states and $T^\pi(s)$ to denote all the improving actions at $s$.
+\begin{multline}\hfill\null
+    \text{states}(T^\pi) = \{s | \exists a: (s,a)\in T^\pi \}
+    \hfill\null
+\end{multline}
+\begin{multline} \hfill\null
+    T^\pi(s) = \{a | (s,a)\in T^\pi \}
+    \hfill\null
+\end{multline}
+\par
+A switch corresponds to changing the actions taken by the current policy on one or more of these improvable states. Since $\forall s\in S, \pi \in \Pi: (s,\pi(s))\in T^\pi$, $|T^\pi|\ge n$. Also, for the optimal policy $\pi^{*}$, $|T^{\pi^{*}}|=n$. Formally, a switch is defined by a set $L^\pi \subseteq T^\pi$ such that $|\text{states}(L^\pi)|=|L^\pi|=n$. This condition ensures that we select only one action for each state $s\in S$. We say $\pi'$ improves upon $\pi$ if $\{(s,\pi'(s))|s\in S\}$ is a switch for $\pi$. Thus we allow $\pi'=\pi$ when $\pi$ is not optimal. Since we are only dealing with randomized algorithms, the probability of this happening is very low and it can indeed be shown that this relaxation can cause at most a constant factor difference in the bounds we will derive.
+\par
+\end{comment}

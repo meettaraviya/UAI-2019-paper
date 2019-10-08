@@ -1,0 +1,19 @@
+\vspace{-10pt}
+\section{DISCUSSION}
+\label{sec:conclusion}
+Our experimental results are perfectly consistent with our theoretical upper bounds: for $60$-state MDPs, the upper bounds far exceed the ranges plotted in Figure~\ref{fig:experiments}. Yet, curiously, many \textit{trends} seen in practice---even if only on one family of randomly-generated MDPs---are quite opposite to the \textit{trends} among the theoretical bounds. By way of RPI-UIP, we have shown the tightest upper bounds yet for the PI family, which improve upon those for RPI and HPI. Yet, HPI seems to work much better in practice. We may attribute this disparity both to the looseness of the upper bounds, and to our choice of test MDPs. The lower bound we show for RPI matches the tightest for HPI on $2$-action MDPs---but both bounds are only linear. It remains to be seen if there are MDPs on which RPI and HPI have substantially higher complexity.
+
+
+The analysis provided in this paper does not exploit any properties specific to MDPs, but applies more generally to AUSOs. It would be interesting to analyse RPI specifically on MDPs. For example, it is known that the Simplex method runs in strongly polynomial time on the Linear Program arising from \textit{deterministic} MDPs~\cite{Post+Ye:2013}. To the best of our knowledge,  HPI and RPI have not been shown to enjoy the same guarantee.
+\vspace{-10pt}
+\subsection*{ACKNOWLEDGEMENTS}
+SK was partially supported by   grants from SERB (ECR/2017/002479) and Ubisoft India.
+  
+%The tightest strong upper bounds currently known for MDP planning are summarised in Table~\ref{tab:summaryofbounds}. The tightest bound for $k = 2$ is of the form $\text{poly}(n) \cdot 1.6059^{n}$. This bound is shown for the Fibonacci Seesaw algorithm, proposed by Szab{\'{o}} and Welzl~\shortcite{Szabo+Welzl:2001} for solving Unique Sink Orientations (USOs). It is known that the policies for 2-action MDPs can be interpreted as vertices of an Acyclic USO (AUSO), whose sink corresponds to an optimal policy. For $k\ge 3$, Kalyanakrishnan and Gupta~\shortcite{Kalyanakrishnan+Gupta} introduced Recursive AUSOs (RAUSOs), which represent the policies of k-action MDPs and extended the Fibonacci Seesaw algorithm to these objects to give a bound of $k^{0.6834n}$. 
+
+% If we look beyond PI, we find even \textit{subexponential} bounds on the expected running time of MDP planning. Bounds of the form $\text{poly}(n, k) \cdot \exp(O(\sqrt{n \log(n)}))$~\cite{Matousek+SW:1996} follow directly from posing MDP planning as a linear program with $n$ variables and $nk$ constraints~\cite{Littman+DK:1995}. The special structure that results when $k = 2$ admits an even tighter bound of $\text{poly}(n) \cdot \exp(2 \sqrt{n})$~\cite{Gartner:2002}.
+
+
+
+
+

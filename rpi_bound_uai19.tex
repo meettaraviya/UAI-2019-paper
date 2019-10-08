@@ -1,0 +1,83 @@
+% Sample LaTeX file for creating a paper in the Morgan Kaufmannn two
+% column, 8 1/2 by 11 inch proceedings format.
+
+\documentclass[letterpaper]{article}
+\usepackage{uai2019}
+\usepackage{bibli}
+\usepackage[margin=1in]{geometry}
+
+% Set the typeface to Times Roman
+\usepackage{times}
+
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{amsfonts}
+\usepackage{forloop}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{dsfont}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\usepackage{subfigure}
+\usepackage[page]{appendix}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.pathreplacing}
+
+\title{A Tighter Analysis of Randomised Policy Iteration}
+
+\author{ {\bf Meet Taraviya} {\normalfont and} {\bf Shivaram Kalyanakrishnan} \\
+Department of Computer Science and Engineering\\ Indian Institute of Technology Bombay\\
+\{mtaraviya,  shivaram\}@cse.iitb.ac.in \\
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+
+\newcommand{\floor}[1]{\lfloor{#1}\rfloor}
+\newcommand{\ceil}[1]{\lceil{#1}\rceil}
+\newcommand{\highlight}[1]{\textcolor{red}{#1}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\vspace{-5pt}
+Policy Iteration (PI) is a popular family of algorithms to compute an optimal policy for a given Markov Decision Problem (MDP). Starting from an arbitrary initial policy, PI repeatedly performs locally-improving switches until an optimal policy is found. The exact form of the switching rule gives rise to different variants of PI. Two decades ago, Mansour and Singh ~\shortcite{Mansour+Singh:1999} provided the first non-trivial ``strong'' upper bound on the number of iterations taken by ``Howard’s PI’’ (HPI), a widely-used variant of PI (strong bounds depend only on the number of states and actions in the MDP). They also proposed a randomised variant (RPI) and showed an even tighter strong upper bound. Their bounds for HPI and RPI have not been improved subsequently.
+
+
+We revisit the algorithms and analysis of Mansour and Singh~\shortcite{Mansour+Singh:1999}. We prove a novel result on the structure of the policy space
+for $k$-action MDPs, $k \geq 2$, which generalises a result known for $k = 2$. Also proposing a new counting argument, we obtain a strong bound of $(O(\sqrt{k \log k }))^{n}$ iterations for an algorithm akin to RPI, improving significantly upon Mansour and Singh's original bound of roughly $O((k/2)^{n})$. Similar analysis of a randomised variant of HPI also yields a strong upper bound of $(O(\sqrt{k \log k }))^{n}$ iterations, registering the first exponential improvement for HPI over the trivial bound of $k^{n}$. Our other contributions include a lower bound of $\Omega(n)$ iterations for RPI and an upper bound of $1.6001^{n}$ iterations for a randomised variant of ``Batch-Switching PI''~\cite{Kalyanakrishnan+MG-bspi:2016} on $2$-action MDPs---the tightest strong upper bound shown yet for the PI family.
+\end{abstract}
+
+\input{introduction}
+\input{policy_iteration}
+\input{related_work}
+\input{upper_bound}
+\input{lower_bound}
+\input{data}
+\input{conclusion}
+
+\bibliographystyle{named}
+\bibliography{rpi_bound_uai19}
+% \vfill\null
+\clearpage
+\input{appendix.tex}
+
+\end{document}

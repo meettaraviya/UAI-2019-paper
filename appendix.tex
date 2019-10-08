@@ -1,0 +1,202 @@
+
+% \appendix
+
+%\setcounter{section}{4}
+% \clearpage
+\begin{appendices}
+
+\section{AUSO instance from Section 4.1}
+\label{app:upperbounds}
+\input{figs/4-auso-worst.tex}
+
+%\newpage
+
+\section{Proofs from Section 5}
+\label{app:lowerbound}
+\setcounter{theorem}{9}
+
+We provide a proof of Theorem~\ref{thm:lowerbound}, which uses the MDP designed by Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994}, shown in Figure~\ref{fig:mnc-mdp}. Recall from Section~\ref{sec:lowerbound} that we only consider states $s \in \{1, 2, \dots, n\}$ as a part of our analysis.
+
+For this proof, we find it convenient to consider a slight modification to RPI. If a policy $\pi$ has $m > 1$ improvable states, note that RPI obtains $\pi^{\prime} \succ \pi$ by picking uniformly at random among the $2^{m} - 1$ improving policies in $I(\pi)$. We consider an algorithm RPI1 that instead picks $\pi^{\prime}$ uniformly at random from $I(\pi) \cup \{\pi\}$. The reason for so doing is that RPI1 can be implemented by independently switching each improvable state with probability $1/2$, which simplifies our analysis. The consequence, though, is that RPI1 is not strictly a PI algorithm, since with a finite probability, we can get $\pi^{\prime} = \pi$. This probability is at most $1/2$, and therefore, the expected number of policies visited by RPI1 (which might contain repetitions) is at most twice the expected number of policies visited by RPI. To prove the theorem, we show below that the former quantity is at least $n + 1$.
+
+Building on  Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994}, first we obtain a simple rule to check if a state $s$ is switchable. 
+
+
+\begin{lemma}
+\label{l1}
+For a policy $\pi$ for $M_n$, a state $s$ is switchable if and only if $$\sum_{s'\le s}\pi(s) \equiv 0 \mod 2.$$
+\end{lemma}
+
+\begin{proof}
+%\textit{Definition 2.1} in 
+For states $s \in \{1, 2, \dots, n\}$, Melekopoglou and Condon~\shortcite{Melekopoglou+Condon:1994} define
+%$a(k)$ for every 
+$$a(1)=-\frac{1}{2}
+\text{ and }
+a(s+1)=a(s)\left(\frac{1}{2}-\pi(s) \right).$$
+It is easy to verify from the definition
+%from \textit{Corollary 2.3} in 
+that 
+%$$a(s+1)=\frac{(-1)^{\sum_{s'\le s}\pi(s)}}{2^s}a(1)=\frac{(-1)^{\sum_{s'\le s}\pi(s)}}{2^s}\frac{-1}{2}$$
+%Thus, 
+$a(s+1)$ is negative if and only if $\sum_{s'\le s}\pi(s) \equiv 0 \mod 2$
+~\cite[see Corollary 2.3]{Melekopoglou+Condon:1994}.
+Since $a(s+1)=a(s)(\frac{1}{2}-\pi(s))$, $a(s+1)$ is negative if and only if $\pi(s)=0$ and $a(s)<0$, or $\pi(s)=1$ and $a(s)>0$. Based on the structure of $M_{n}$, Melekopoglou and Condon\shortcite[see Corollary 2.4]{Melekopoglou+Condon:1994} show that the latter condition is equivalent to $s$ being switchable.
+%dynamics o This latter event Combined with \textit{Corollary 2.4} in \shortcite[see Corollary 2.4]{Melekopoglou+Condon:1994}, the proof is complete.
+% Proof follows from \textit{Corollary 2.3} and \textit{Corollary 2.4} in \cite{mnv}. Vertex $k$ is switchable if and only if 
+% For $k=1$, $a(1)=-\frac{1}{2}$ is negative and hence vertex $1$ is switchable if and only if $S_1$ is $0$. Assume the statement holds for all positive integers $k' \le k$. Since $a(k+1)=a(k)(\frac{1}{2}-S_k)$, if $S_k$ is $0$ and $a(k)$ is negative, or $S_k$ is $1$ and $a(k)$ is positive, $a(k+1)$ is negative. If vertex $k$ is switchable 
+\end{proof}
+
+The crucial step in our proof is to define a \textit{progress} function $f$ on the policy space, which is then shown to be non-increasing with respect to PI updates. 
+
+\begin{definition}
+\label{d2}
+    For a policy $\pi$ for $M_n$, $$f(\pi) \mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}} \min \left(\textsf{states}(T^\pi) \cup \{n+1\}\right).$$
+\end{definition}
+In other words, $f(\pi)$ is defined to be the smallest switchable state if $\pi$ is not optimal, and $n + 1$ if it is $\pi^{\star}$. The lemma below establishes the monotonicity of $f$.
+%, $f(\pi^{*}) \mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}} n+1$.
+\begin{lemma}
+\label{l3}
+    If RPI1 visits the policies $\pi^0, \pi^1, \dots, \pi^m$ in sequence, then for $1\le i \le m$, $f(\pi^{i-1})\le f(\pi^i)$.
+\end{lemma}
+
+\begin{proof}
+Since we stop when there are no improvable states, $f(\pi^{m-1}) \leq f(\pi^m)=n+1$. Otherwise assume that $i<m$. Let $f(\pi^{i-1}) = s$. Since vertex $s$ is the smallest switchable state in $\pi^{i-1}$, any state $s'$ will not be switched in $\pi^{i-1}$ for $1\le s' < s$, and hence $\pi^i(s')=\pi^{i-1}(s')$.
+% \textcolor{red}{From Lemma~\ref{l1}, we have $\sum_{s''\le s}\pi^{i-1}(s'') \equiv 1 \mod 2$ for $1 \le s' < s$. This implies $\pi$ is of the form $10^{s-2}1w$ for some $w \in \{0,1\}^{n-s}$ if $s\ge 2$ or $0w^{\prime}$ for some $w^{\prime}\in\{0,1\}^{n-1}$ if $s=1$. WHILE THIS RED PORTION MIGHT BE TRUE, IS IT ACTUALLY USED TO OBTAIN THE NEXT STATEMENT? ALSO I ASSUME THE $\pi$ IN THIS PORTION IS $\pi^{i - 1}$. YES?}
+% Since states $1, 2, \dots, s-1$ are not switchable for $\pi^{i-1}$, we have $\pi^i(s')=\pi^{i-1}(s')$ for $1 \le s' < s$.
+It follows from  Lemma~\ref{l1} that states $1, 2, \dots, s-1$ are not switchable in $\pi^i$. Thus, $f(\pi^i)\ge s = f(\pi^{i-1})$.
+\end{proof}
+
+% \begin{corollary}
+%     For policies $\pi$ and $\pi^{\prime}$ for $M_{n}$, if $\pi^{\prime} \succeq \pi$, then $f(\pi) \le f(\pi')$.
+% \end{corollary}
+
+% \begin{proof}
+% 4. EXPLAIN THIS PART--WHY SUCH A PI ALGORITHM EXISTS. ACTUALLY DO YOU USE THIS COROLLARY? IT DOESN'T SEEM TO BE CORRECT---COMPARE, FOR EXAMPLE, POLICIES 010 AND 111 IN FIGURE 1. ONE DOMINATES THE OTHER, BUT THERE'S NO PATH. THE RESULT IS TRUE IF THE DOMINATING ONE IS AN OPTIMAL POLICY. REMOVE THE COROLLARY IF IT IS NOT USED. - Not Used, but corollary is valid for MDP being considered.
+
+% We have a policy iteration algorithm that visits the policies $\pi^0,\pi^1,...,\pi^m$ where $\pi^0=\pi$ and $\pi^m=\pi'$, where the switching rule is to only switch improvable states where the policy differs from $\pi'$. Applying Lemma \ref{l3} gives us the above result.
+% \end{proof}
+
+Next we show that as RPI1 proceeds, with sufficiently high probability $f$ increases quite slowly. It follows thereafter that at least $n + 1$ policy evaluations must be made in expectation if $\pi^{0} = 0^{n}$ is the initial policy ($f(\pi^{0})$ and $f(\pi^{\star})$ differ by $n$).
+
+%the expected number of RPI updates to drop this potential function from $f(\pi^0)$ to $f(\pi^{\star})$ is at least $n+1$ if we choose $\pi^0(s)=0$ for all $s \in \{1, 2, \dots, n\}$. %Sometimes we will represent a policy $\pi$ as a bit-string $w_1w_2{\dots}w_n \in \{0,1\}^n$ where $\pi(s)=w_s$. In this notation, $\pi^0 = 0^n$ and $\pi^{\star} = 10^{n-1}$. 
+
+
+\begin{lemma}
+\label{l4}
+    If RPI1 visits the policies $\pi^0, \pi^1, \dots, \pi^m$ in sequence, then for $1\le i \le m$, $t\ge 0$, $$\mathbb{P}\{f(\pi^{i}) - f(\pi^{i-1}) \ge t\} \le \frac{1}{2^t}.$$
+\end{lemma}
+
+
+\begin{proof}
+%We first provide a high level overview. If $f(\pi^{i-1})=s$, the event $E=\{f(\pi^{i})\ge s+t\}$, requires $1,2,...,s+t-1$ not to be switchable in $\pi^i$. This in turn, due to Lemma~\ref{l1}, requires some of the randomly made decisions in switching states of $\pi^{i-1}$ to turn out in a particular way favourable to $E$. Since states $1,2,...,s-1$ were not switchable and remain same in $\pi^{i-1}$ and $\pi^i$, there is no decision to be made at these states. Only the decisions made at states $s, s+1,...,s+t-1$ need to be favourable to $E$. This happens with probability $\frac{1}{2^t}$. For some $\pi^{i-1}\in \Pi, t\in \mathbb{N}$, $f(\pi^{i})\ge s+t$ might not be possible at all (for example, when $t>n$), in which case the left hand side of the inequality is $0\le \frac{1}{2^t}$. Now we provide the formal argument. Let $[x]$ denote the set $\{1, 2, \dots, x\}.$
+
+
+%If $t=0$, the inequality follows directly from Lemma~\ref{l3}. Henceforth we assume $t>0$.
+If $t=0$, the RHS is 1 and the result trivial. Henceforth we assume $t > 0$. The proof splits into cases $f(\pi^{i - 1}) = 1$ and $f(\pi^{i - 1}) > 1$, which we consider in turn. 
+Let $[x]$ denote the set $\{1, 2, \dots, x\}.$
+
+If $f(\pi^{i-1})=1$, $s=1$ is switchable in $\pi^{i-1}$. From Lemma~\ref{l1}, $\pi^{i-1}(1)=0$. Thus, let $\pi^{i-1}=0^{s^\prime}x$ for some $1 \le s^\prime \le n$, $x\in \{0,1\}^{n-s^\prime}$, and $x$ starts with $1$ or $x$ is empty. Applying Lemma~\ref{l1} for states $1,2,\dots,s'+1$, we get that states $1,2,\dots,s'$ are switchable in $\pi^{i-1}$ and $s'+1$ is not switchable in $\pi^{i-1}$, if $s'+1\in [n]$. If $f(\pi^{i})\ge t+1$, the states $1,2,\dots,t$ are not switchable in $\pi^i$. Applying Lemma~\ref{l1} for states $1,2,\dots,t$, we get that $\pi^{i}=10^{t-1}y$ where $y\in \{0,1\}^{n-t}$. If $s'=n$, $t\le n=s'$. $t$ cannot be greater than $s^\prime$ if $s'+1\in [n]$ as that will imply $\pi^{i}(s^\prime+1)=0\ne \pi^{i-1}(s^\prime+1)$, despite $s^\prime+1$ not being switchable in $\pi^{i-1}$. Hence, if $t > s'$, $\mathbb{P}\{f(\pi^i)\ge t+1\}=0\le \frac{1}{2^t}$. Otherwise $t \le s'$. Therefore, states $1,2,\dots,t$ are switchable in $\pi^{i-1}$. To get to $\pi^i$ from $\pi^{i-1}$, the state $1$ must be switched and the states $2,3, \dots,t$ must not be switched. As each state is switched with probability $\frac{1}{2}$ by RPI1, the probability of this event happening is exactly $\frac{1}{2^t}$.
+
+If $f(\pi^{i-1})=s>1$, $s$ is switchable in $\pi^{i-1}$ and $1,2,\dots,s-1$ are not switchable in $\pi^{i-1}$. Applying Lemma~\ref{l1} for states $1,2,\dots,s$, we get $\pi^{i-1}=10^{s-2}10^{s'}x$ for some $0 \le s^\prime \le n-s$, $x\in \{0,1\}^{n-s-s^\prime}$, and $x$ starts with $1$ or $x$ is empty. Applying Lemma~\ref{l1} for states $s+1,s+2,\dots,s+s'$, we get that states $s+1,s+2,\dots,s+s'$ are also switchable in $\pi^{i-1}$ and $s+s'+1$ is not switchable in $\pi^{i-1}$, if $s+s'+1\in [n]$. Note that since $i-1<m$, $\pi^{i-1}\ne \pi^{*}$ and hence $s\le n$. If $f(\pi^{i})\ge s+t$, the states $1,2,\dots,s+t-1$ are not switchable in $\pi^i$. Applying Lemma~\ref{l1} for states $1,2,\dots,s+t-1$, we get that $\pi^{i}=10^{s+t-2}y$ where $y\in \{0,1\}^{n-s-t+1}$. If $s+s'=n$, $s+t-1\le n=s+s'$. $s+t-1$ cannot be greater than $s+s'$ if $s+s'+1\in [n]$ as that will imply $\pi^{i}(s+s'+1)=0\ne \pi^{i-1}(s+s'+1)$, despite $s+s'+1$ not being switchable in $\pi^{i-1}$. Hence, if $s+t-1 > s+s'$, $\mathbb{P}\{f(\pi^i)\ge s+t\}=0\le \frac{1}{2^t}$. Otherwise $s+t-1 \le s+s'$. Therefore, states $s,s+1,\dots,s+t-1$ are switchable in $\pi^{i-1}$. To get to $\pi^i$ from $\pi^{i-1}$, the state $s$ must be switched and the states $s+1,s + 2, \dots,s+t-1$ must not be switched. As each state is switched with probability $\frac{1}{2}$ by RPI1, the probability of this event happening is exactly $\frac{1}{2^t}$.
+% Assume $f(\pi^{i-1}) = s$. Let $s'>s$ be the vertex with the smallest index after $s$ which is not switchable. If all vertices after $s$ are switchable, we let $s'=n+1$.Using Lemma \ref{l1}, $\pi^{i-1}(s'')=0$ for $s < s'' < s'$ and $\pi^{i-1}(s')=1$ if $s' \le n$. Since $s'$ is not switched, $\pi^i(s')=\pi^{i-1}(s')=1$ and hence either $s'$ or $s'-1$ should be switchable in $\pi^i$. So $f(\pi^i)\le s'$.
+% \newline
+% For $f(\pi^{i-1}) < f(\pi^i)$, $s$ should not be switchable in $\pi^i$. Since states less than $s$ are not switched, and whether or not $s$ is switchable in $\pi^i$ depends on the states $1, 2,...,s$, $s$ must have been switched in $\pi^{i-1}$. This happens with probability $\frac{1}{2}$. So $Pr[f(\pi^{i}) - f(\pi^{i-1}) \ge 1] \le \frac{1}{2}$.
+% \newline
+% For $f(\pi^i)=s+t$ where $t < s'-s$, we require $s+t$ to be switchable in $\pi^i$, $s''$ to be not switchable in $\pi^i$ for $s \le s'' < s+t$. For this states $s$ and $s+t$ must have been switched in $\pi^{i-1}$ and $s+t'$ must not be switched for $ 1 \le t' < t$. Since each switchable state is switched independently with probability $\frac{1}{2}$, the probability of this event is $\frac{1}{2^{t+1}}$. Thus $Pr[f(\pi^{i}) - f(\pi^{i-1}) = t] = \frac{1}{2^{t+1}}$ for $t < s'-s$. So $Pr[f(\pi^{i}) - f(\pi^{i-1}) \ge t] = \sum_{t'=t}^{t'=s'-s-1}Pr[f(\pi^{i}) - f(\pi^{i-1}) = t']=\sum_{t'=t}^{t'=s'-s-1}\frac{1}{2^{t'+1}} \le \frac{1}{2^t}$.
+\end{proof}
+
+%\textcolor{red}{In the definition and the theorem be more precise. (1) It seems like $N(i)$ must be defined as a MINIMUM over all policies $\pi$  with $f(\pi) = i$. (2) Use $\pi$ instead of of $\pi^{0}$ in the definition. (3) Is this proof by induction? Add a few more lines to make it more clear---induction on which variable? (4) Iterations/Evaluations etc. can be off-by-1 when we're counting. If you begin with $\pi^{\star}$, do you use 0 iterations ot 1 iteration? Be precise with this wording in both definition and theorem. (5) Also, why is the denominator $2^{t + 1}$ in the recursion for $N(s)$ rather than $2^{t}?$ Explain in words in the proof itself.}
+
+\begin{definition}
+    We define $L:\Pi\to \mathbb{R}_{\ge 0}$, where $L(\pi)$ is the expected number of policies evaluated by RPI1 starting from $\pi$.
+\end{definition}
+Note that even if we start from $\pi^0=\pi^{*}$, we need to evaluate $\pi^0$ to know that it is optimal. Hence $L(\pi^{*})=1$.
+\begin{definition}
+    We define $N:[n+1]\to \mathbb{R}_{\ge 0}$, where $$N(s) = \min_{\pi\in\Pi, f(\pi)= s} L(\pi).$$
+\end{definition}
+It directly follows from the definition that $N(f(\pi))\le L(\pi)$ for any $\pi\in\Pi$.
+\begin{theorem}
+	For $s\in [n+1]$, $N(s) \ge n+2-s$.
+\end{theorem}
+\begin{proof}
+If $s=n+1$, $f(\pi)= n+1$ is true only for $\pi=\pi^*$. Hence $N(n+1)=L(\pi^{*})=1\ge n+2-(n+1)$.
+
+Now, let $s\in [n]$. Let $\pi$ be a policy such that $N(s)=L(\pi)$. Hence $f(\pi)=s$. Since $f(\pi^{*})=n+1$, $\pi$ is not optimal. Let $\pi^{\prime}$ be obtained from $\pi$ by an RPI1 update.
+
+First we upper-bound the expectation of $f(\pi^\prime)$. Since $f(\pi')$ is a non-negatively valued random variable, we can use the following expression for its expectation. 
+\begin{align*}
+\mathbb{E}[f(\pi^\prime)] &= \sum_{n+1 \ge s^\prime \ge 1}\mathbb{P}\{f(\pi^\prime)\ge s'\} 
+\\ &= \sum_{s\ge s^\prime \ge 1}1 + \sum_{n+1 \ge s^\prime > s}\mathbb{P}\{f(\pi^\prime)\ge s'\}\\
+&\le s + \sum_{n+1 \ge s^\prime > s}\frac{1}{2^{s^\prime-s}}\\
+&\le s + \sum_{k=1}^{\infty}\frac{1}{2^{k}}\\
+&= s+1.
+\end{align*}
+Now, assuming inductively that $N(s^\prime)\ge n+2-s^\prime$ for $s< s^\prime\le n+1$, we can lower-bound $N(s)=L(\pi)$ as
+\begin{align*}
+N(s) &=&& 1+\sum_{\pi^{\prime\prime}\in\Pi}L(\pi^{\prime\prime})\mathbb{P}\{\pi^{\prime}=\pi^{\prime\prime}\}
+\\ &\ge&& 1+\sum_{\pi^{\prime\prime}\in\Pi}N(f(\pi^{\prime\prime}))\mathbb{P}\{\pi^{\prime}=\pi^{\prime\prime}\}
+\\ &=&& 1+\sum_{n+1 \ge s^\prime \ge 1} \Bigg[ \sum_{\pi^{\prime\prime}\in\Pi, f(\pi^{\prime\prime})=s^\prime}N(s^\prime)\mathbb{P}\{\pi^{\prime}=\pi^{\prime\prime}\}\Bigg] 
+\\ &=&& 1+\sum_{n+1 \ge s^\prime \ge 1}N(s^\prime)\Bigg[\sum_{\pi^{\prime\prime}\in\Pi, f(\pi^{\prime\prime})=s^\prime}\mathbb{P}\{\pi^{\prime}=\pi^{\prime\prime}\}\Bigg]
+\\ &=&& 1+\sum_{n+1 \ge s^\prime \ge 1}N(s^\prime)\mathbb{P}\{f(\pi^{\prime})=s^\prime\}
+\\ &=&& 1+\sum_{n+1 \ge s^\prime \ge s}N(s^\prime)\mathbb{P}\{f(\pi^{\prime})=s^\prime\},
+% \\ & && (\because \mathbb{P}(f(\pi^{\prime})<s)=0)
+% \\
+\end{align*}
+%\begin{flushright}
+%$(\because %\mathbb{P}(f(\pi^{%\prime})<s=f(\pi))%=0)$.
+%\end{flushright}
+since $\mathbb{P}\{f(\pi^{\prime})<s=f(\pi)\}=0$. We rearrange terms in a convenient form, and apply $\mathbb{E}[f(\pi^{\prime})] \leq s+ 1$, to get
+\begin{align*}
+N(s)&\ge&& 1+\sum_{n+1 \ge s^\prime \ge s}(N(s^\prime)-n-2+s')\mathbb{P}\{f(\pi^{\prime}\}=s^\prime\}
+\\
+&&&+\sum_{n+1 \ge s^\prime \ge s}(n+2-s')\mathbb{P}\{f(\pi^{\prime})=s^\prime\}
+\\
+% &\text{\textcolor{red}{Don't get the next two steps}}\\
+&=&& 1+\sum_{n+1 \ge s^\prime \ge s}(N(s^\prime)-n-2+s')\mathbb{P}\{f(\pi^{\prime}\}=s^\prime\}
+\\
+&&&+n+2-\sum_{n+1 \ge s^\prime \ge s}s'\mathbb{P}\{f(\pi^{\prime}\}=s^\prime\}
+\\
+&=&& \sum_{n+1 \ge s^\prime \ge s}(N(s^\prime)-n-2+s')\mathbb{P}\{f(\pi^{\prime})=s^\prime\}
+\\
+&&&+n+3-\mathbb{E}[f(\pi')]
+\\
+&\ge && \sum_{n+1 \ge s^\prime \ge s}(N(s^\prime)-n-2+s')\mathbb{P}\{f(\pi^{\prime})=s^\prime\}
+\\
+&&&+n+2-s.
+% \\
+% &\text{\textcolor{red}{Because induction hypothesis}}\\
+% &\ge n+3 +(N(s)-n-2+s)\mathbb{P}(f(\pi^{\prime})=s)
+%         \\ &- \sum_{n+1 \ge s^\prime \ge s}s^\prime\mathbb{P}(f(\pi^{\prime})=s^\prime)
+% \\ &\ge n+3+\frac{N(s)-n-2+s}{2}-\mathbb{E}[f(\pi^\prime)]
+% \\ &\ge n+2-s+\frac{N(s)-n-2+s}{2}.
+% \\ &\ge 1+\sum_{n+1 \ge s^\prime \ge s}N(s^\prime)(\mathbb{P}(f(\pi^{\prime})\ge s^\prime)-\mathbb{P}(f(\pi^{\prime})\ge s^\prime+1)
+% \\ &= 1 + N(s)\mathbb{P}(f(\pi^\prime)\ge s) \\ &+ \sum_{n+1 \ge s^\prime > s}\mathbb{P}(f(\pi^\prime)\ge s)(N(s^\prime)-N(s^\prime-1))
+\end{align*}
+By the induction hypothesis, $N(s')-n-2+s^{\prime}$ is non-negative for $s^{\prime}>s$. Therefore, after removing terms corresponding to $s^{\prime}>s$, we get $$ N(s) \ge n+2-s+(N(s)-n-2+s)\mathbb{P}\{f(\pi')=s\},$$ which rearranges into $$(N(s)-n-2+s)(1-\mathbb{P}\{f(\pi')=s\})\ge 0 .$$
+% \end{align*}
+
+Now, $\mathbb{P}\{f(\pi')=s\}$ cannot be $1$ because there is a policy $\pi''=\textsf{modify}(\pi, \{(s, a)\}) \in \Pi$, where $a\in \{0,1\}$ and $a\ne\pi(s)$, such that $\mathbb{P}\{\pi'=\pi''\}>0$ and $f(\pi'')>s$ (since $s$ is not switchable in $\pi''$). Hence, we must have
+$N(s) \ge n+2-s$.
+\end{proof}
+
+At this point, Theorem~\ref{thm:lowerbound} follows as a corollary; the statement of the theorem is reproduced below.
+
+\begin{corollary}
+	Starting from $\pi^0=0^n$, the expected number of policies RPI evaluates on $M_n$ before terminating is at least $\frac{n+1}{2}$.
+    % $N(n+1) = 0$. $N(i) \ge n+2-i$ for $1 \le i \le n$.
+\end{corollary}
+
+\begin{proof}
+% If $f(\pi^0)=n+1$, $\pi^0=\pi^{*}$ is already optimal and RPI halts.
+% \newline
+% If 
+% If $f(\pi^{i-1})=s$, Lemma \ref{l4} shows that $Pr[f(\pi^i)\ge s+t] \le \frac{1}{2^t}$. Hence $N(s) \ge 1+\sum_{t=0}^{n+1-s}\frac{N(s+t)}{2^{t+1}}=1+\sum_{t=0}^{n-s}\frac{N(s+t)}{2^{t+1}}$. For $s=n$, we have $N(s)=2$. Assume $N(s')\ge n+2-s'$ for $n \ge s'>s$. Thus $N(s) \ge 1+\frac{N(s)}{2}+\sum_{t=1}^{n+1-s}\frac{n+2-s-t}{2^{t+1}} \ge 1+\frac{N(s)}{2}+\sum_{t=1}^{\infty}\frac{n+2-s-t}{2^{t+1}} = 1 + \frac{N(s)+n-s}{2}$. Thus $N(s) \ge n+2-s$.
+For $\pi^0=0^{n}$, $f(\pi^0)=1$. Thus 
+\begin{equation*}
+L(\pi^0)\ge N(1)\ge n+2-1=n+1.
+\end{equation*}
+In other words, RPI1 evaluates at least $n + 1$ policies in expectation, which implies RPI evaluates at least half that number of policies in expectation.
+\end{proof}
+
+\end{appendices}

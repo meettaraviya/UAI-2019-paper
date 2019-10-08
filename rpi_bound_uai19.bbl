@@ -1,0 +1,110 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Bellman}{1957}]{Bellman:1957}
+Richard Bellman.
+\newblock {\em Dynamic Programming}.
+\newblock Princeton University Press, 1$^{st}$ edition, 1957.
+
+\bibitem[\protect\citeauthoryear{Fearnley}{2010}]{Fearnley:2010}
+John Fearnley.
+\newblock Exponential lower bounds for policy iteration.
+\newblock In {\em Proceedings of the Thirty-seventh International Colloquium on
+  Automata, Languages and Programming (ICALP 2010)}, pages 551--562. Springer,
+  2010.
+
+\bibitem[\protect\citeauthoryear{G{\"{a}}rtner}{2002}]{Gartner:2002}
+Bernd G{\"{a}}rtner.
+\newblock The random-facet simplex algorithm on combinatorial cubes.
+\newblock {\em Random Structures and Algorithms}, 20(3):353--381, 2002.
+
+\bibitem[\protect\citeauthoryear{Gupta and
+  Kalyanakrishnan}{2017}]{Kalyanakrishnan+Gupta}
+Anchit Gupta and Shivaram Kalyanakrishnan.
+\newblock Improved strong worst-case upper bounds for mdp planning.
+\newblock In {\em Proceedings of the Twenty-Sixth International Joint
+  Conference on Artificial Intelligence, {IJCAI-17}}, pages 1788--1794, 2017.
+
+\bibitem[\protect\citeauthoryear{Hansen and Zwick}{2010}]{Hansen+Zwick:2010}
+Thomas~Dueholm Hansen and Uri Zwick.
+\newblock Lower bounds for {H}oward's algorithm for finding minimum mean-cost
+  cycles.
+\newblock In {\em Proceedings of the Twenty-second International Symposium on
+  Algorithms and Computation (ISAAC 2011)}, pages 425--426. Springer, 2010.
+
+\bibitem[\protect\citeauthoryear{Hollanders \bgroup \em et al.\egroup
+  }{2012}]{Hollanders+DJ:2012}
+Romain Hollanders, Bal{\'{a}}zs Gerencs{\'{e}}r, and Jean{-}Charles Delvenne.
+\newblock The complexity of policy iteration is exponential for discounted
+  {M}arkov decision processes.
+\newblock In {\em Proceedings of the Fifty-first {IEEE} Conference on Decision
+  and Control (CDC 2012)}, pages 5997--6002. IEEE, 2012.
+
+\bibitem[\protect\citeauthoryear{Hollanders \bgroup \em et al.\egroup
+  }{2014}]{Hollanders+GDJ:2014}
+Romain Hollanders, Bal{\'{a}}zs Gerencs{\'{e}}r, Jean{-}Charles Delvenne, and
+  Rapha{\"{e}}l~M. Jungers.
+\newblock Improved bound on the worst case complexity of policy iteration,
+  2014.
+\newblock URL: http://arxiv.org/pdf/1410.7583v1.pdf.
+
+\bibitem[\protect\citeauthoryear{Howard}{1960}]{Howard:1960}
+Ronald~A. Howard.
+\newblock {\em Dynamic programming and Markov processes}.
+\newblock MIT Press, 1960.
+
+\bibitem[\protect\citeauthoryear{Kalyanakrishnan \bgroup \em et al.\egroup
+  }{2016}]{Kalyanakrishnan+MG-bspi:2016}
+Shivaram Kalyanakrishnan, Utkarsh Mall, and Ritish Goyal.
+\newblock Batch-switching policy iteration.
+\newblock In {\em Proceedings of the Twenty-fifth International Joint
+  Conference on Artificial Intelligence (IJCAI 2016)}, pages 3147--3153. AAAI
+  Press, 2016.
+
+\bibitem[\protect\citeauthoryear{Littman \bgroup \em et al.\egroup
+  }{1995}]{Littman+DK:1995}
+Michael~L. Littman, Thomas~L. Dean, and Leslie~Pack Kaelbling.
+\newblock On the complexity of solving {M}arkov decision problems.
+\newblock In {\em Proceedings of the Eleventh Annual Conference on Uncertainty
+  in Artificial Intelligence (UAI 1995)}, pages 394--402. Morgan Kaufmann,
+  1995.
+
+\bibitem[\protect\citeauthoryear{Mansour and Singh}{1999}]{Mansour+Singh:1999}
+Yishay Mansour and Satinder Singh.
+\newblock On the complexity of policy iteration.
+\newblock In {\em Proceedings of the Fifteenth Conference on Uncertainty in
+  Artificial Intelligence (UAI 1999)}, pages 401--408. Morgan Kaufmann, 1999.
+
+\bibitem[\protect\citeauthoryear{Matou\v{s}ek \bgroup \em et al.\egroup
+  }{1996}]{Matousek+SW:1996}
+Ji\v{r}{\'{\i}} Matou\v{s}ek, Micha Sharir, and Emo Welzl.
+\newblock A subexponential bound for linear programming.
+\newblock {\em Algorithmica}, 16(4/5):498--516, 1996.
+
+\bibitem[\protect\citeauthoryear{Melekopoglou and
+  Condon}{1994}]{Melekopoglou+Condon:1994}
+Mary Melekopoglou and Anne Condon.
+\newblock On the complexity of the policy improvement algorithm for {M}arkov
+  decision processes.
+\newblock {\em {INFORMS} Journal on Computing}, 6(2):188--192, 1994.
+
+\bibitem[\protect\citeauthoryear{Puterman}{1994}]{Puterman:1994}
+Martin~L. Puterman.
+\newblock {\em Markov Decision Processes}.
+\newblock Wiley, 1994.
+
+\bibitem[\protect\citeauthoryear{Schurr and
+  Szab{\'o}}{2005}]{Schurr+Szabo:2005}
+Ingo Schurr and Tibor Szab{\'o}.
+\newblock Jumping doesn't help in abstract cubes.
+\newblock In Michael J{\"u}nger and Volker Kaibel, editors, {\em Integer
+  Programming and Combinatorial Optimization}, pages 225--235, Berlin,
+  Heidelberg, 2005. Springer Berlin Heidelberg.
+
+\bibitem[\protect\citeauthoryear{Szab{\'{o}} and
+  Welzl}{2001}]{Szabo+Welzl:2001}
+Tibor Szab{\'{o}} and Emo Welzl.
+\newblock Unique sink orientations of cubes.
+\newblock In {\em Proceedings of the Forty-second Annual Symposium on
+  Foundations of Computer Science (FOCS 2001)}, pages 547--555. IEEE, 2001.
+
+\end{thebibliography}
